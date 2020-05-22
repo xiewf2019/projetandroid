@@ -128,7 +128,7 @@
               var b=list2.toString();
               var c=list3.toString();
               console.log(a)
-              alert(a+b+c)
+              //alert(a+b+c)
               $.ajax({
                         url: 'show_district',
                         type: 'POST',
@@ -141,7 +141,7 @@
                     ,dataType: 'html',
                     success: function(result){
                         var arr=result.split(",");
-                        alert(arr.length);
+                        //alert(arr.length);
                         if(arr.length<=1){
                           alert("desicion impossible");
                           return;
