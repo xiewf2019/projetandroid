@@ -54,12 +54,12 @@ def estExtension(dec, decPartiel):
         if len(circo) == 0:
             continue
 
-        coulCirco = int(dec[ circo[0] ])
+        coulCirco = int(dec[ circo[0]-1 ])
         if coulCirco in dejaPris:
             return False
 
         for canton in circo:
-            if int(dec[canton]) != coulCirco:
+            if int(dec[canton-1]) != coulCirco:
                 return False 
         dejaPris.add(coulCirco)
 
@@ -67,11 +67,6 @@ def estExtension(dec, decPartiel):
 
 
 
-def printCanton(pts, couleur, tex):
-    tex.write("\\draw[fill="+couleur+"] \n")
-    for idPoint in range(len(pts)):
-        tex.write( "(" + str(pts[idPoint][0]) + "," + str( pts[idPoint][1]) + ") --")
-    tex.write( " cycle;\n")
 
 
 
@@ -129,12 +124,12 @@ else:
     constraint1 =[]
 if len(sys.argv)>=3:
     constraint2 = re.findall(r"[\w']+",sys.argv[2])
-    constraint2 = [int(i) for i in constraint1]
+    constraint2 = [int(i) for i in constraint2]
 else:
     constraint2 =[]
 if len(sys.argv)>=4:
     constraint3 = re.findall(r"[\w']+",sys.argv[3])
-    constraint3 = [int(i) for i in constraint1]
+    constraint3 = [int(i) for i in constraint3]
 else:
     constraint3 =[]
 
