@@ -1,18 +1,27 @@
 #!/usr/bin/env python
 
-#nomFichierEntree = "dessins/sortie63-0001pour100.txt"#input()
-#nbCircos = 3#int(input())
 import json 
 import subprocess
 import sys
 import re
 
 
-def lecture():
-    f = open("sortie01.txt", "r")
+def lecture(num):
+    if(num<10):
+        file="sortie0"+str(num)+".txt"
+    else:
+        file="sortie"+str(num)+".txt"
+    file1="5pour100/"+file
+    file2="20pour100/"+file
+    f = open(file1, "r")
     dec = f.readlines()
     f.close()
-    
+    if (len(dec)<3):
+        if os.path.isfile(file2):
+            f=open(file2, "r")
+            dec = f.readlines()
+            f.close()
+
     decoupage = []
     for l in dec:
         l = l.replace(",", " ")
@@ -20,8 +29,9 @@ def lecture():
 
     idDep = int(decoupage[0][-1])
     nbDecoupages = int(decoupage[1][-1])
+    file3="graphe_depts/"+str(num)+".out"
 
-    fdep = open("1.out", "r")
+    fdep = open(file3, "r")
     lignes = fdep.readlines()
     fdep.close()
 
@@ -70,12 +80,10 @@ def estExtension(dec, decPartiel):
 
 
 
-def main(decPartiel):
-    couleurs = ["blue", "red", "green"]
-    
-
-    nbCircos = 3
-    nbDecoupages, decoupage, nbCantons, popCantons = lecture()
+def main(num,nb,decPartiel):
+    nbCircos = nb[0]
+    num=num[0]
+    nbDecoupages, decoupage, nbCantons, popCantons = lecture(num)
     popTotale = sum(popCantons)
 
     ecartMin = 1
@@ -88,69 +96,28 @@ def main(decPartiel):
                 ecartMin = ecart
                 decOpt = dec
     return decOpt
-    # tex = open(str(idF)+".tex", "w")
-    # tex.write( "\\documentclass[10pt]{article} \n \\usepackage{tikz}\n \\begin{document}\n")
-    
-    # if(decOpt == []):
-    #     tex.write("\\section{Pas d'extension valide} \n \\end{document}\n")
-
-    # else:
-    #     nbC = len(cantons)
-        
-    #     tex.write("\\begin{figure} \n \centering \n \caption{Ecart a la moyenne : " + str(ecartMin) + "}\n")
-    #     tex.write( "\\begin{tikzpicture}[scale=6,yscale=1.2] \n")
-    #     for idC in range(nbC): 
-    #         c = int(decOpt[idC])
-    #         if(cantons[idC]["geometry"]["type"] == "MultiPolygon"):
-    #             for idP in range(len(cantons[idc]["geometry"]["coordinates"])):
-    #                 printCanton(cantons[idC]["geometry"]["coordinates"][idP][0], couleurs[c], tex)
-    #         else:
-    #             printCanton(cantons[idC]["geometry"]["coordinates"][0], couleurs[c], tex)
-    #     tex.write("\\end{tikzpicture}\n \\end{figure} \n \\bigskip\n \\end{document}\n")
-    
-    # tex.close()
-
-
-
-
-# idFichier = sys.argv[1]
-# f = open(idFichier, "r")
-# lines = f.readlines()
-# f.close()
-if len(sys.argv)>=2:
-    constraint1 = re.findall(r"[\w']+",sys.argv[1])
-    constraint1 = [int(i) for i in constraint1]
-else:
-    constraint1 =[]
-if len(sys.argv)>=3:
-    constraint2 = re.findall(r"[\w']+",sys.argv[2])
-    constraint2 = [int(i) for i in constraint2]
-else:
-    constraint2 =[]
-if len(sys.argv)>=4:
-    constraint3 = re.findall(r"[\w']+",sys.argv[3])
-    constraint3 = [int(i) for i in constraint3]
-else:
-    constraint3 =[]
 
 
 
 
 
-# constraint2 = re.findall(r"[\w']+",sys.argv[2])
-# constraint3 = re.findall(r"[\w']+",sys.argv[3])
-# # constraint1 = sys.argv[1]
-# # constraint2 = sys.argv[2]
-# # constraint3 = sys.argv[3]
 
+entree =[]
 
-# constraint2 = [int(i) for i in constraint2]
-# constraint3 = [int(i) for i in constraint3]
+num=re.findall(r"[\w']+",sys.argv[1])
+num=[int(i) for i in num]
+nb=re.findall(r"[\w']+",sys.argv[2])
+nb=[int(i) for i in nb]
 
-    
-entree = [constraint1, constraint2, constraint3]
+for i in range(4,12):
+    if len(sys.argv)>=i:
+        constraint1 = re.findall(r"[\w']+",sys.argv[i-1])
+        constraint1 = [int(i) for i in constraint1]
+    else:
+        break
+    entree.append(constraint1)
 
-print(main(entree))
+print(main(num,nb,entree))
 
 # _ = subprocess.call("pdflatex "+str(idFichier)+".tex", shell=True)
 # _ = subprocess.call("./convert.py "+str(idFichier)+".pdf", shell=True)

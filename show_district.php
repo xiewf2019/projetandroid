@@ -1,16 +1,29 @@
 <?php
-$list1 = $_REQUEST['list1'];
-$list2 = $_REQUEST['list2'];
-$list3 = $_REQUEST['list3'];
-$d='python3 extrapole.py ';
-$command1='python extrapole.py '.$list1." ".$list2." ".$list3." ";
-
-$command  = escapeshellcmd('python extrapole.py '.$list1." ".$list2." ".$list3);
-$output = shell_exec($command);
+$list = $_REQUEST['list'];
+$num_dept= $_REQUEST['num_dept'];
+$nb1=$_REQUEST['nb'];
+$list1=str_split($list);
+$nb=sizeof($list1);
+$num_dept=(string)($num_dept);
+// $command  = escapeshellcmd('python extrapole.py '.$list1." ".$list2." ".$list3);
+// $output = shell_exec($command);
+// $opq=exec($command1,$s,$r);
+$command1='python extrapole.py '.$num_dept." ".$nb1;
+$str="";
+for ($i=0; $i<$nb; $i++) {
+	
+    if($list1[$i]==","){
+    	if($str!=""){
+    		$command1.=" ".$str;
+    		$str="";
+    	}
+    }
+    else{if($list1[$i]!=" "){$str.=$list1[$i];}
+    	else{$str.=",";}
+    }
+}
 $opq=exec($command1,$s,$r);
-
 echo $opq
-
 
 
 #echo "file:".$file."<br>";

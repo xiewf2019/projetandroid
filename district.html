@@ -6,6 +6,10 @@
 <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
 <meta charset="UTF-8">
 <style>
+.bar-highlight {
+    fill: #ec008c;
+    opacity: 1;
+}
 .button {
   background-color: red; /* Green */
   border: none;
@@ -23,11 +27,16 @@
 .button2 {background-color: yellow;color: black} /* Red */ 
 .button3 {background-color: green;} /* Gray */ 
 .button4 {background-color: magenta;} /* Black */
+.button5  {background-color: pink;}
+.button6  {background-color: cyan;}
+.button7  {background-color: orange;}
+.button8  {background-color: brown;}
+.button9  {background-color: brown;}
 </style></head>
 
-<body >
+<body onload=draw_map()>
 	
-  <h1>L'Ain (01)</h1>
+  <h1 id= titre1></h1>
   <h2 id="pourcentage"></h2>
   <div>
   	<!-- <svg id=sv height="130" width="500">
@@ -38,48 +47,53 @@
 	 </svg> -->
   
   <script >
-        var colortab=["red","blue","yellow","green","magenta","black",]
-        var length=3
+        var colortab=["red","blue","yellow","green","magenta","pink","cyan","orange","brown","gold"]
         var color="red"
-        var data=0
+        var n_deCanton=0
        
-        function train(result){
-            var svg=document.createElementNS('http://www.w3.org/2000/svg','svg');   
-            svg.setAttribute("style","width:100%;height:100%;");
-            svg.setAttribute("viewBox","20 55 200 200");
-            data= result.length
-            for(var i = 0; i < result.length; i++){
-              var polygon=document.createElementNS('http://www.w3.org/2000/svg','polygon');
-              s=""
-              var x=0
-              var y=0
-              for (var j=0; j < result[i].geometry.coordinates[0].length; j++){
-                x+=Math.round(result[i].geometry.coordinates[0][j][0]*100-450);
-                y+=Math.round(result[i].geometry.coordinates[0][j][1]*100-4500);
-                s= s+Math.round(result[i].geometry.coordinates[0][j][0]*100-450)+","+Math.round(result[i].geometry.coordinates[0][j][1]*100-4500)+" "
-              }
-              x=x/result[i].geometry.coordinates[0].length;
-              y=y/result[i].geometry.coordinates[0].length;
-              //console.log(result.length)
-              polygon.setAttribute("points",s)
-              polygon.setAttribute("fill",colortab[length])
-              polygon.setAttribute("stroke","white")
+        // function train(result){
+        //     var svg=document.createElementNS('http://www.w3.org/2000/svg','svg');   
+        //     svg.setAttribute("style"," border:1px solid #cd0000;width:100%;height:100%;");
+        //     svg.setAttribute("viewBox","20 55 145 100");
+        //     //svg.setAttribute("stroke","black")
+        //     data= result.length
+        //     for(var i = 0; i < result.length; i++){
+        //       var polygon=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+        //       s=""
+        //       var x=0
+        //       var y=0
+        //       for (var j=0; j < result[i].geometry.coordinates[0].length; j++){
+        //         x+=Math.round(result[i].geometry.coordinates[0][j][0]*100-450);
+        //         y+=Math.round(result[i].geometry.coordinates[0][j][1]*100-4500);
+        //         s= s+Math.round(result[i].geometry.coordinates[0][j][0]*100-450)+","+Math.round(result[i].geometry.coordinates[0][j][1]*100-4500)+" "
+        //       }
+        //       x=x/result[i].geometry.coordinates[0].length;
+        //       y=y/result[i].geometry.coordinates[0].length;
+        //       //console.log(result.length)
+        //       polygon.setAttribute("points",s)
+        //       polygon.setAttribute("fill",colortab[length])
+        //       polygon.setAttribute("stroke","white")
 
-              var idcanton= result[i].properties.canton;
-              polygon.setAttribute("id","p"+idcanton);
+        //       var idcanton= result[i].properties.canton;
+        //       polygon.setAttribute("id","p"+idcanton);
 
-              var text=document.createElementNS('http://www.w3.org/2000/svg','text');
-              text.setAttribute("id",idcanton)
-              text.setAttribute("x",Math.round(x))
-              text.setAttribute('y', Math.round(y));
-              text.setAttribute('fill', 'black');
-              text.setAttribute('font-size','3px')
-              text.setAttribute("onclick","changecolor(this)")
-              text.textContent = idcanton; 
-              svg.appendChild(polygon);
-              svg.appendChild(text);
-            }
-            var text= document.createElement("p");
+        //       var text=document.createElementNS('http://www.w3.org/2000/svg','text');
+        //       text.setAttribute("id",idcanton)
+        //       text.setAttribute("x",Math.round(x))
+        //       text.setAttribute('y', Math.round(y));
+        //       text.setAttribute('fill', 'black');
+        //       text.setAttribute('font-size','3px')
+        //       text.setAttribute("onclick","changecolor(this)")
+        //       text.textContent = idcanton; 
+        //       svg.appendChild(polygon);
+        //       svg.appendChild(text);
+        //     }
+           
+        //     document.body.appendChild(svg);
+            
+        // }
+        function draw_button(length){
+          var text= document.createElement("p");
             text.innerHTML="button pour choisir les groupe";
             document.body.appendChild(text);
             for(var i = 0; i <=length; i++){
@@ -97,61 +111,188 @@
             var submit=document.createElement("BUTTON");
             submit.innerHTML="submit";
             submit.setAttribute("class","button button0");
-            submit.setAttribute("onclick","submit1()");
+            submit.setAttribute("onclick","submit1("+length+")");
             document.body.appendChild(submit);
             var reset=document.createElement("BUTTON");
             reset.innerHTML="reset";
             reset.setAttribute("class","button button0");
-            reset.setAttribute("onclick","reset()");
+            reset.setAttribute("onclick","reset("+length+")");
             document.body.appendChild(reset);
-            document.body.appendChild(svg);
-            
+            var back=document.createElement("BUTTON");
+            back.innerHTML="backtomap";
+            back.setAttribute("class","button button0");
+            back.setAttribute("onclick","backtomap()");
+            document.body.appendChild(back);
         }
-        function submit1(){
-              list1=[]
-              list2=[]
-              list3=[]
-              for(var i = 1; i <= data; i++){
-                if(i<10){var d=document.getElementById("p0"+i);}
-                else{var d=document.getElementById("p"+i);}
-                var color_c=d.getAttribute("fill");
-                console.log(color_c)
-                if(color_c==colortab[0])
-                  list1.push(i);
-                if(color_c==colortab[1])
-                  list2.push(i);
-                if(color_c==colortab[2])
-                  list3.push(i);
+        function readTextFile(file, callback) {
+            var rawFile = new XMLHttpRequest();
+            rawFile.overrideMimeType("application/json");
+            rawFile.open("GET", file, false);
+            rawFile.onreadystatechange = function() {
+              if (rawFile.readyState === 4 && rawFile.status == "200") {
+                callback(rawFile.responseText);
               }
-              
-              var a=list1.toString();
-              var b=list2.toString();
-              var c=list3.toString();
-              console.log(a)
-              //alert(a+b+c)
-              $.ajax({
-                        url: 'show_district',
-                        type: 'POST',
-                          data: {
-                         'list1':a ,
-                         'list2':b,
-                         'list3':c
+            }
+            rawFile.send(null);
+        }
+
+        function draw_map(){
+            var svg=document.createElementNS('http://www.w3.org/2000/svg','svg');   
+            svg.setAttribute("style"," border:1px solid #cd0000;width:100%;height:100%;");
+            
+            length=get_length()
+            console.log(length)
+            draw_button(length)
+            var c=document.getElementById("titre1");
+            str=c.innerHTML
+            l=str.length
+            b=str[l-3]+str[l-2]
+            file="json-description-depts/"+b+".json"
+            var a=parseInt(length)
+            readTextFile(file, function(result) {
+
+              var data = JSON.parse(result);
+              n_deCanton=data.length
+              console.log(data)
+              var array=data[0].geometry.coordinates[0]
+              var xmin=array[0][0]*100-450
+              var xmax=array[0][0]*100-450
+              var ymin=array[0][1]*100-4500
+              var ymax=array[0][1]*100-4500
+              for(i=0;i<data.length;i++){
+                array= data[i].geometry.coordinates[0]
+                s=""
+                var xtotal=0
+                var ytotal=0
+                
+                for (var j=0; j < array.length; j++){
+                  x=Math.round(array[j][0]*100-450);
+                  y=Math.round(array[j][1]*100-4500);
+                  if(y<ymin){ymin=y}
+                  if(y>ymax){ymax=y}
+                  if(x<xmin){xmin=x}
+                  if(x>xmax){xmax=x}
+                  xtotal+=Math.round(array[j][0]*100-450);
+                  ytotal+=Math.round(array[j][1]*100-4500);
+                  s= s+Math.round(array[j][0]*100-450)+","+Math.round(array[j][1]*100-4500)+" "
+                }
+                height=ymax-ymin
+                width=xmax-xmin
+                xmin=xmin
+                ymin=ymin
+                var polygon=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+                
+                x=xtotal/data[i].geometry.coordinates[0].length;
+                y=ytotal/data[i].geometry.coordinates[0].length;
+                polygon.setAttribute("points",s)
+                polygon.setAttribute("fill",colortab[a])
+                polygon.setAttribute("stroke","white")
+                polygon.setAttribute("stroke-width","0.5")
+                polygon.addEventListener('mouseover', mouseOverEffect);
+                polygon.addEventListener('mouseout', mouseOutEffect);
+                
+           
+
+                var idcanton= data[i].properties.canton;
+                polygon.setAttribute("id","p"+idcanton);
+
+                var text=document.createElementNS('http://www.w3.org/2000/svg','text');
+                text.setAttribute("id",idcanton)
+                text.setAttribute("x",Math.round(x))
+                text.setAttribute('y', Math.round(y));
+                text.setAttribute('fill', 'black');
+                text.setAttribute('font-size','3px')
+                polygon.setAttribute("onclick","changecolor(this)")
+                text.textContent = idcanton; 
+                svg.appendChild(polygon);
+                svg.appendChild(text); 
+              }
+              svg.setAttribute("viewBox",xmin+" "+ymin+" "+width+" "+height );
+              document.body.appendChild(svg);           
+            });
+            console.log(n_deCanton)
+
+
+            
+
+
+        }
+        function get_length(){
+           //alert(a+b+c)
+              $.ajax({  
+                        async:false,
+                        url: 'get_length.php',
+                        type: 'GET',
+                    success: function(result){
+                      var c=document.getElementById("titre1");
+                      
+                      var d=result.split('\\').join("")
+                      var d=d.split("xc3xa9").join("e")
+                      var d=d.split("xc3xa8").join("e")
+                      // var d=d.split("xc3xb4").join("o")
+                      var d=d.split("'").join("")
+                      var d=d.split(",").join("")
+                      console.log(d)
+                      str=""
+                      for(i=1 ;i<d.length;i++){
+                        if (i==d.length-2){
+                          length+=d[i]
+                          console.log(length)
+                        }
+                        if (i<d.length-2){
+                          str+=d[i]
                         }
 
-                    ,dataType: 'html',
-                    success: function(result){
+                      }
+
+                      c.innerHTML=str
+                     
+                    }
+                  })
+              return length
+              
+        }
+        function submit1(length){
+              list=[]
+              for (var j=0;j<length;j++){
+                c=""
+                for (var i = 1; i <= n_deCanton; i++){
+                  if(i<10){var d=document.getElementById("p0"+i);}
+                  else{var d=document.getElementById("p"+i);}
+                  var color_c=d.getAttribute("fill");
+                  if(color_c==colortab[j])
+                    c+=i+" "
+                }
+                list.push(c)
+              }
+              var c=document.getElementById("titre1");
+              str=c.innerHTML
+              l=str.length
+              b=str[l-3]+str[l-2]
+              d=list.toString()
+              console.log(d)
+              console.log(length)
+              
+               $.ajax({
+                        url: 'show_district',
+                        type: 'POST',
+                        data: {
+                         'list':d ,
+                         'num_dept':b,
+                         'nb':length,
+                        }
+
+                      ,dataType: 'html',
+                      success: function(result){
                         var arr=result.split(",");
-                        //alert(arr.length);
                         if(arr.length<=1){
                           alert("desicion impossible");
                           return;
                                         }
 
-                        for(var i = 1; i <=data; i++){
+                        for(var i = 1; i <=n_deCanton; i++){
                           if (i==1){var x=parseInt(arr[i-1][2]);}
                           else{var x=parseInt(arr[i-1][2]);}
-                          
-                          console.log(x);
                           if(i<10){var d=document.getElementById("p0"+i);}
                           else{var d=document.getElementById("p"+i);}
                           d.setAttribute("fill",colortab[x]);
@@ -159,14 +300,18 @@
 
                         }
                         var tab=[];
-                        for(var i =data+1;i<arr.length;i++){
+                        for(var i =n_deCanton+1;i<arr.length;i++){
                           var x=parseFloat(arr[i].substring(2,6));
                           tab.push(x);
                           
                         }
 
                         var d= document.getElementById("pourcentage");
-                        d.innerHTML="ratio population   groupe0 "+tab[0]+"  groupe1 "+tab[1]+"  groupe2 "+tab[2];
+                        str2="ratio population  "
+                        for (var j=0;j<length;j++){
+                          str2=str2+"   groupe"+j+" "+tab[j]
+                        }
+                        d.innerHTML=str2
                         //   if(i<10){var d=document.getElementById("p0"+i);}
                         //   else{var d=document.getElementById("p"+i);}
 
@@ -177,11 +322,12 @@
 
               })
         }
-        function reset(){
-          for(var i = 1; i <= data; i++){
+        function reset(b){
+          var a=parseInt(b)
+          for(var i = 1; i <= n_deCanton; i++){
                 if(i<10){var d=document.getElementById("p0"+i);}
                 else{var d=document.getElementById("p"+i);}
-               d.setAttribute("fill",colortab[length]);
+               d.setAttribute("fill",colortab[a]);
                
               }
             var d= document.getElementById("pourcentage");
@@ -191,17 +337,26 @@
         
         function changecolor(b){
           var idcanton=b.id;
-          var polygon=document.getElementById("p"+idcanton);
-          console.log(b.id)
+          var polygon=document.getElementById(idcanton);
+
           polygon.setAttribute("fill",color);
         }
         function getcolor(a){
           color= colortab[a]
         }
+        function backtomap(){
+          location.replace("map.html")
+        }
+        function mouseOverEffect() {
+          this.classList.add("bar-highlight");
+        }
+        function mouseOutEffect() {
+          this.classList.remove("bar-highlight");
+        }
       
 
   </script>
-  <script type="text/javascript" src="a.json?callback=train"></script>
+  
  
 
   
