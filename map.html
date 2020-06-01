@@ -51,7 +51,6 @@
 		
 				var data = JSON.parse(result);
 				var tab=data.features
-				console.log(tab)
 
 				
 				for(var i = 0; i < data.features.length; i++){
@@ -189,8 +188,6 @@
 			}
 
 		}if (b<10) {b="0"+b}
-		
-
 
 		$.ajax({
                         url: 'write_code.php',
