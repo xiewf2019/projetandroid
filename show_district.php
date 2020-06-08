@@ -8,23 +8,22 @@ $num_dept=(string)($num_dept);
 // $command  = escapeshellcmd('python extrapole.py '.$list1." ".$list2." ".$list3);
 // $output = shell_exec($command);
 // $opq=exec($command1,$s,$r);
-$command1='python extrapole.py '.$num_dept." ".$nb1;
+$command1='python extrapole.py '.$num_dept.' '.$nb1;
 $str="";
 for ($i=0; $i<$nb; $i++) {
 	
-    if($list1[$i]==","){
+    if($list[$i]==","){
     	if($str!=""){
     		$command1.=" ".$str;
     		$str="";
     	}
     }
-    else{if($list1[$i]!=" "){$str.=$list1[$i];}
-    	else{$str.=",";}
+     else{if($list[$i]!=" " ){$str.=$list[$i];}
+     	else{$str.=":";}
     }
 }
 $opq=exec($command1,$s,$r);
 echo $opq
-
 
 #echo "file:".$file."<br>";
 #echo "cmd:".$command."<br>";

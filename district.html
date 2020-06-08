@@ -31,7 +31,10 @@
 .button6  {background-color: cyan;}
 .button7  {background-color: orange;}
 .button8  {background-color: brown;}
-.button9  {background-color: brown;}
+.button9  {background-color: gold;}
+.button10{background: lime;}
+.button11{background: linen;}
+.bytton12{background:  tomato;}
 </style></head>
 
 <body onload=draw_map()>
@@ -47,7 +50,7 @@
 	 </svg> -->
   
   <script >
-        var colortab=["red","blue","yellow","green","magenta","pink","cyan","orange","brown","gold"]
+        var colortab=["red","blue","yellow","green","magenta","pink","cyan","orange","brown","gold","lime","linen","tomato"]
         var color="red"
         var n_deCanton=0
        
@@ -154,36 +157,64 @@
               var data = JSON.parse(result);
               n_deCanton=data.length
               console.log(data)
+
               var array=data[0].geometry.coordinates[0]
               var xmin=array[0][0]*100-450
               var xmax=array[0][0]*100-450
               var ymin=array[0][1]*100-4500
               var ymax=array[0][1]*100-4500
               for(i=0;i<data.length;i++){
-                array= data[i].geometry.coordinates[0]
-                s=""
-                var xtotal=0
-                var ytotal=0
-                
-                for (var j=0; j < array.length; j++){
-                  x=Math.round(array[j][0]*100-450);
-                  y=Math.round(array[j][1]*100-4500);
-                  if(y<ymin){ymin=y}
-                  if(y>ymax){ymax=y}
-                  if(x<xmin){xmin=x}
-                  if(x>xmax){xmax=x}
-                  xtotal+=Math.round(array[j][0]*100-450);
-                  ytotal+=Math.round(array[j][1]*100-4500);
-                  s= s+Math.round(array[j][0]*100-450)+","+Math.round(array[j][1]*100-4500)+" "
+                type= data[i].geometry.type
+                if (type=="Polygon"){
+                  array= data[i].geometry.coordinates[0]
+                  s=""
+                  var xtotal=0
+                  var ytotal=0
+                  
+                  for (var j=0; j < array.length; j++){
+                    x=Math.round(array[j][0]*100-450);
+                    y=Math.round(array[j][1]*100-4500);
+                    if(y<ymin){ymin=y}
+                    if(y>ymax){ymax=y}
+                    if(x<xmin){xmin=x}
+                    if(x>xmax){xmax=x}
+                    xtotal+=Math.round(array[j][0]*100-450);
+                    ytotal+=Math.round(array[j][1]*100-4500);
+                    s= s+Math.round(array[j][0]*100-450)+","+Math.round(array[j][1]*100-4500)+" "
+                  }
+                  height=ymax-ymin
+                  width=xmax-xmin
+                  xmin=xmin
+                  ymin=ymin
+                  x=xtotal/data[i].geometry.coordinates[0].length;
+                  y=ytotal/data[i].geometry.coordinates[0].length;
+                }else{
+                  s=""
+                  var xtotal=0
+                  var ytotal=0
+                  for(k= 0;k<data[i].geometry.coordinates.length;k++){
+                    array=data[i].geometry.coordinates[k][0]
+                  }
+                  for (var j=0; j < array.length; j++){
+                    x=Math.round(array[j][0]*100-450);
+                    y=Math.round(array[j][1]*100-4500);
+                    if(y<ymin){ymin=y}
+                    if(y>ymax){ymax=y}
+                    if(x<xmin){xmin=x}
+                    if(x>xmax){xmax=x}
+                    xtotal+=Math.round(array[j][0]*100-450);
+                    ytotal+=Math.round(array[j][1]*100-4500);
+                    s= s+Math.round(array[j][0]*100-450)+","+Math.round(array[j][1]*100-4500)+" "
+                  }
+                  height=ymax-ymin
+                  width=xmax-xmin
+                  xmin=xmin
+                  ymin=ymin
+                  x=xtotal/data[i].geometry.coordinates[0].length;
+                  y=ytotal/data[i].geometry.coordinates[0].length;
+
                 }
-                height=ymax-ymin
-                width=xmax-xmin
-                xmin=xmin
-                ymin=ymin
                 var polygon=document.createElementNS('http://www.w3.org/2000/svg','polygon');
-                
-                x=xtotal/data[i].geometry.coordinates[0].length;
-                y=ytotal/data[i].geometry.coordinates[0].length;
                 polygon.setAttribute("points",s)
                 polygon.setAttribute("fill",colortab[a])
                 polygon.setAttribute("stroke","white")
@@ -244,6 +275,12 @@
                         }
 
                       }
+                      if (d[d.length-2]=="2" && d[d.length-3]=="1"){
+                        str ="nord 59 "
+                        length="12"
+                        console.log(length)
+
+                      } 
 
                       c.innerHTML=str
                      
@@ -271,7 +308,7 @@
               b=str[l-3]+str[l-2]
               d=list.toString()
               console.log(d)
-              console.log(length)
+              console.log(d.length)
               
                $.ajax({
                         url: 'show_district',
@@ -285,6 +322,7 @@
                       ,dataType: 'html',
                       success: function(result){
                         var arr=result.split(",");
+                        console.log(arr)
                         if(arr.length<=1){
                           alert("desicion impossible");
                           return;
