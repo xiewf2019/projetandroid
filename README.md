@@ -10,3 +10,5 @@ le district.html est le html qui creer les map de departement automatique
 
 les button aux  preimer rang permet de choisir les  groupe
 aux 2emme rang permet de afficher resulta et reset
+voici lien pour video de presentation
+https://catdrop.drycat.fr/r/x6Gg2zI_#hGHaauK+ov7wVaAgiLns6H9Ak/zCcsT+vCiimquYin0=
