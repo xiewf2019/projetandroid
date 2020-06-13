@@ -12,4 +12,4 @@ les button aux  preimer rang permet de choisir les  groupe
 aux 2emme rang permet de afficher resulta et reset
 suite un bug sur le lien video 
 voici le nouveau lien pour video
-https://catdrop.drycat.fr/r/_oAx3AIE#RTLZNQ0Qu4uGyhIJhQn8fK7bMwkv/NeZ0YHzlfj34TM=
+https://catdrop.drycat.fr/r/dBgYkUAQ#fOk/JhpxxL+KNIhD9YBAl+2xOvJ+syQngRJfzGFUkHA=
